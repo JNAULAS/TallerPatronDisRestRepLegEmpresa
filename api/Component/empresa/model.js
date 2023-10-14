@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const empresa_schema = new Schema({
     ruc: String,
-    cedula: String,
+    //cedula: String,
     nombre: String,
     domicilio: String,
     telefono: String,

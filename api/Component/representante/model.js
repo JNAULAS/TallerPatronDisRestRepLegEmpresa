@@ -7,11 +7,19 @@ const req_string = {
 }
  
 
-const empresa_schema = new Schema({ 
+/* const empresa_schema = new Schema({ 
     ruc: req_string,
     nombre: req_string, 
     domicilio: req_string,
     telefono: req_string, 
+}) */
+const empresa_schema = new Schema({
+    empresa: {
+        type: Schema.ObjectId,
+        ref: 'empresa',
+    }
+}, {
+    timestamps: true,
 })
 
 const representantelegal_schema = new Schema({ 
