@@ -2,7 +2,7 @@ const storage = require('./storage')
 
 function obtenerRepresentante( filtro_representantelegal ) {
     return new Promise((resolve, reject) => {
-        resolve( storage.get( filtro_representantelegal) )
+        resolve( storage.obtener( filtro_representantelegal) )
     })
 }
 
@@ -11,14 +11,14 @@ function agregarRepresentante( representantelegal ) {
         if (!representantelegal.ruc) {
             return reject('No hay datos suficientes.')
         }
-        storage.add( representantelegal )
+        storage.agregar( representantelegal )
         resolve( representantelegal )        
     })
 }
 
 function actualizarRepresentante( representantelegal ) {
     return new Promise((resolve, reject) => {
-        let resultado = storage.update( representantelegal )
+        let resultado = storage.actualizar( representantelegal )
         if (resultado) {
             return resolve( representantelegal )
         } else {
@@ -30,7 +30,7 @@ function actualizarRepresentante( representantelegal ) {
 
 function eliminarRepresentante( dato ) {
     return new Promise((resolve, reject) => {
-        resolve( storage.delete( dato ) )
+        resolve( storage.eliminar( dato ) )
     })    
 }
 
