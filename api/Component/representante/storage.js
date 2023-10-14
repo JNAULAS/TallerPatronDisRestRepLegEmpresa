@@ -8,7 +8,7 @@ function obtenerRepresentante(paramRuc) {
         }
         Model.find(filtro)
             .populate({
-                path: 'empresa_detalle',
+                path: 'empresa',
                 populate: {
                     path: 'empresa',
                     model: 'empresa'
@@ -16,6 +16,8 @@ function obtenerRepresentante(paramRuc) {
             })
             .exec()
             .then(data => {
+                console.log('Datos retornados')
+                console.log(data)
                 lista = []
                 for (let elemento of data) {
                     objeto = {
@@ -29,7 +31,7 @@ function obtenerRepresentante(paramRuc) {
                         telefono: elemento.telefono
                     }
                     objeto.empresas = []
-                    for (let detalle of elemento.empresas) {
+                    for (let detalle of elemento.empresa) {
                         registro = {
                             nombre: detalle.empresa.nombre,
                             ruc: detalle.empresa.ruc
@@ -38,10 +40,10 @@ function obtenerRepresentante(paramRuc) {
                     }
                     lista.push(objeto)
                 }
-                if (error)
+                /* if (error)
                     reject(error)
-                else
-                    resolve(lista)
+                else*/
+                resolve(lista)
             })
     })
 }

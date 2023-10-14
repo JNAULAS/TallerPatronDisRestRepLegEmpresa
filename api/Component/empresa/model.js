@@ -9,5 +9,5 @@ const empresa_schema = new Schema({
     telefono: String,
 }) 
 
-const model = mongoose.model('Empresa', empresa_schema)
+const model = mongoose.model('empresa', empresa_schema)
 module.exports = model

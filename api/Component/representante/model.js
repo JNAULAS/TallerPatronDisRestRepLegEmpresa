@@ -23,7 +23,7 @@ const representantelegal_schema = new Schema({
     email: req_string,
     domicilio: req_string,
     telefono: req_string,
-    empresa_detalle: [empresa_schema]
+    empresa: [empresa_schema]
 }, {
     timestamps: true,
 })
