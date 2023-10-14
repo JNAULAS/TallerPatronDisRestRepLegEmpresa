@@ -4,31 +4,29 @@ const response = require('../../Network/response')
 
 const routes = express.Router()
 
-routes.post('/', function(req, res){
+routes.get('/', function(req, res) {
+    const filtro_representantelegal = req.query.ruc || null
+    controller.obtenerRepresentante( filtro_representantelegal )
+        .then( (data) => response.success(req, res, data, 200) )
+        .catch( (error) => response.error(req, res, error, 500) )
+})
+
+routes.post('/', function(req, res) {
     controller.agregarRepresentante( req.body )
         .then( (data) => response.success(req, res, data, 201) )
-        .catch( (error) => response.error(req, res, error, 400) )
+        .catch( (error) => response.error(req, res, error, 500) )
 })
 
-
-routes.get('/', function(req, res){
-    // const filtro = req.body || null  // Consulta mediante el Cuerpo body
-    const filtro = req.body || null // Consulta por query ejemplo ?usuario:"jnaulas" query
-    controller.obtenerRepresentante( filtro )
-        .then( (data) => response.success(req, res, data, 200) )
-        .catch( (error) => response.error(req, res, error, 400) )
-})
-
-routes.put('/', function(req, res){
+routes.patch('/', function(req, res) {
     controller.actualizarRepresentante( req.body )
-        .then( (data) => response.success(req, res, data, 201) )
-        .catch( (error) => response.error(req, res, error, 400) )
+        .then( (data) => response.success(req, res, data, 200) )
+        .catch( (error) => response.error(req, res, error, 500) )
 })
 
-routes.delete('/', function(req, res){
+routes.delete('/', function(req, res) {
     controller.eliminarRepresentante( req.query )
-        .then( (data) => response.success(req, res, data, 201) )
-        .catch( (error) => response.error(req, res, error, 400) )
+        .then( (data) => response.success(req, res, data, 200) )
+        .catch( (error) => response.error(req, res, error, 500) )
 })
 
 module.exports = routes

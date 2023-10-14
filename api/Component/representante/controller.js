@@ -1,33 +1,36 @@
 const storage = require('./storage')
 
-function agregarRepresentante( dato ) {
+function obtenerRepresentante( filtro_representantelegal ) {
     return new Promise((resolve, reject) => {
-        resolve( storage.agregar( dato ) )
+        resolve( storage.get( filtro_representantelegal) )
     })
 }
 
-function obtenerRepresentante( filtro ) {
+function agregarRepresentante( representantelegal ) {
     return new Promise((resolve, reject) => {
-        resolve( storage.obtener( filtro ) )
-    })
-}
-
-function actualizarRepresentante( dato ) {
-    return new Promise((resolve, reject) => {
-        let representante = {
-            nombre: representante.nombre,
-            apellido: representante.apellido,
-            email: representante.email,
-            domicilio: representante.domicilio,
-            telefono: representante.telefono,
+        if (!representantelegal.ruc) {
+            return reject('No hay datos suficientes.')
         }
-        resolve( storage.actualizar( representante ) )
+        storage.add( representantelegal )
+        resolve( representantelegal )        
     })
 }
+
+function actualizarRepresentante( representantelegal ) {
+    return new Promise((resolve, reject) => {
+        let resultado = storage.update( representantelegal )
+        if (resultado) {
+            return resolve( representantelegal )
+        } else {
+            return reject('No existe el representantelegal.')
+        }
+    })
+}
+
 
 function eliminarRepresentante( dato ) {
     return new Promise((resolve, reject) => {
-        resolve( storage.eliminar( dato ) )
+        resolve( storage.delete( dato ) )
     })    
 }
 
