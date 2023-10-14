@@ -1,58 +1,61 @@
 const Model = require('./model')
 
-function obtenerRepresentante( filtro_representantelegal ) {
+function obtenerRepresentante(paramRuc) {
     return new Promise((resolve, reject) => {
         let filtro = {}
-        if (filtro_representantelegal) {
-            filtro = { ruc: filtro_representantelegal }
+        if (paramRuc) {
+            filtro = { ruc: paramRuc }
         }
-        Model.find( filtro ) 
+        Model.find(filtro)
             .populate({
-                path:'empresa',
+                path: 'empresa_detalle',
+                populate: {
+                    path: 'empresa',
+                    model: 'empresa'
+                }
             })
-
             .exec()
-            .then(data => { 
+            .then(data => {
                 lista = []
                 for (let elemento of data) {
-                    objeto = { 
-                        ruc:elemento.ruc,
-                        nombre:elemento.nombre,
-                        apellido:elemento.apellido,
-                        email:elemento.email,
-                        domicilio:elemento.domicilio,
-                        telefono:elemento.telefono, 
+                    objeto = {
+                        id: elemento._id,
+                        ruc: elemento.ruc,
+                        cedula: elemento.cedula,
+                        nombre: elemento.nombre,
+                        apellido: elemento.apellido,
+                        email: elemento.email,
+                        domicilio: elemento.domicilio,
+                        telefono: elemento.telefono
                     }
-                    objeto.detalles = []
-                    for (let detalle of elemento.empresa) {
-                        registro = { 
-                            rucEmpresa: detalle.ruc,
-                            nombreEmpresa:detalle.nombre,
-                            domicilioEmpresa:detalle.domicilio,
-                            telefonoEmpresa:detalle.telefono, 
+                    objeto.empresas = []
+                    for (let detalle of elemento.empresas) {
+                        registro = {
+                            nombre: detalle.empresa.nombre,
+                            ruc: detalle.empresa.ruc
                         }
-                        objeto.detalles.push( registro )
+                        objeto.empresas.push(registro)
                     }
-                    lista.push( objeto )
+                    lista.push(objeto)
                 }
-                resolve(lista)
-                }) 
-                .catch(error => {
+                if (error)
                     reject(error)
-                  });   
-    }) 
+                else
+                    resolve(lista)
+            })
+    })
 }
 
-function agregarRepresentante( representantelegal ) { 
+function agregarRepresentante(representantelegal) {
 
-    const objeto = new Model( representantelegal )
+    const objeto = new Model(representantelegal)
     objeto.save()
 }
 
-async function actualizarRepresentante( representantelegal ) {
-    const objeto = await Model.findOne( {ruc: representantelegal.ruc} )
+async function actualizarRepresentante(representantelegal) {
+    const objeto = await Model.findOne({ ruc: representantelegal.ruc })
 
-    if ( objeto ) {
+    if (objeto) {
         objeto.estado = False
         return resultado = await objeto.save()
     } else {
@@ -60,13 +63,13 @@ async function actualizarRepresentante( representantelegal ) {
     }
 }
 
-async function eliminarRepresentante( representantelegal ) {
-    return await Model.deleteOne({ruc: representantelegal.ruc})
+async function eliminarRepresentante(representantelegal) {
+    return await Model.deleteOne({ ruc: representantelegal.ruc })
 }
 
 module.exports = {
-    agregar:agregarRepresentante,
-    obtener:obtenerRepresentante,
-    actualizar:actualizarRepresentante,
-    eliminar:eliminarRepresentante
+    agregar: agregarRepresentante,
+    obtener: obtenerRepresentante,
+    actualizar: actualizarRepresentante,
+    eliminar: eliminarRepresentante
 }
